@@ -13,7 +13,7 @@ export class ApiRouter {
 
   initializeRoutes() {
     this.router.get('/', apiControllers.getHomePage);
-    this.router.get('/file', apiControllers.getFilePage);
+    this.router.get('/file/:filename', apiControllers.getFilePage);
     this.router.post('/file/list', apiControllers.postFileListPage)
     this.router.put('/file', apiControllers.putFilePage)
     this.router.delete('/file/:filename', apiControllers.deleteFilePage)

@@ -4,6 +4,7 @@ const fs = require('fs');
 const os = require('os');
 const path = require('path');
 const busboy = require('busboy');
+const mime = require('mime-types')
 
 export class ApiControllers {
   getHomePage(request: Request, response: Response, next: NextFunction) {
@@ -11,7 +12,7 @@ export class ApiControllers {
   }
 
   getFilePage(request: Request, response: Response, next: NextFunction) {
-    const downloadFrom: string  =  path.join(os.tmpdir(), `file_server-${request.query.filename}`);
+    const downloadFrom: string  =  path.join(os.tmpdir(), `file_server-${request.params.filename}`);
     if (fs.existsSync(downloadFrom)) {
       response.download(downloadFrom);
     } else {
@@ -36,7 +37,7 @@ export class ApiControllers {
     let saveTo: string;
 
     bb.on('file', (filename: string, file: any, info: any) => {
-      saveTo = path.join(os.tmpdir(), `file_server-${filename}`);
+      saveTo = path.join(os.tmpdir(), `file_server-${filename}.${mime.extension(info.mimeType)}`);
       file.pipe(fs.createWriteStream(saveTo));
     });
     bb.on('close', () => {
